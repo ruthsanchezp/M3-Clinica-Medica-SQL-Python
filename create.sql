@@ -13,6 +13,7 @@ CREATE TABLE Cama (
 CREATE TABLE Paciente (
     id_paciente INT PRIMARY KEY,
     nombre_paciente VARCHAR(255),
+    rut VACHAR (255),
     fecha_ingreso DATE,
     fecha_alta DATE,
     id_cama INT,
