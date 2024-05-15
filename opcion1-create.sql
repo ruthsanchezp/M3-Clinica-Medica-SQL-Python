@@ -10,6 +10,8 @@ CREATE TABLE Cama (
     FOREIGN KEY (id_habitacion) REFERENCES Habitacion(id_habitacion)
 );
 
+// El rut debería ser el ID...??
+
 CREATE TABLE Paciente (
     id_paciente INT PRIMARY KEY,
     nombre_paciente VARCHAR(255),
