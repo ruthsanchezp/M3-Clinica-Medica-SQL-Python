@@ -1,4 +1,6 @@
--- Primero, crea la tabla que no tiene dependencias
+############Con ayuda del chat GTP
+    
+    -- Primero, crea la tabla que no tiene dependencias
 CREATE TABLE Habitacion (
     id_habitacion INT PRIMARY KEY,
     numero_habitacion INT
