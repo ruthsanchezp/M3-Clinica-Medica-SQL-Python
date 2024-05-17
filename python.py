@@ -12,6 +12,7 @@ def connect_db():
         host=config.HOST,
     )
 
+
 # Mostrar todos los pacientes
 def mostrar_pacientes(conn):
     cursor = conn.cursor()
@@ -81,23 +82,24 @@ def cambiar_cama(conn, rut, numero_cama, numero_habitacion):
     print("Cama cambiada exitosamente.")
     cursor.close()
 
-# Cambiar a un paciente de médico y crear un nuevo diagnóstico
 def cambiar_medico(conn, rut, nuevo_medico):
     cursor = conn.cursor()
     
-    # Obtener id_paciente
+    # Obtener id_paciente y el id del diagnóstico más reciente
     cursor.execute("SELECT id_paciente FROM Paciente WHERE rut = %s", (rut,))
     result = cursor.fetchone()
     
     if result:
         id_paciente = result[0]
         
-        # Crear un nuevo diagnóstico
+        # Actualizar el médico en el diagnóstico más reciente
         query = """
-        INSERT INTO Diagnostico (id_paciente, id_medico, comentarios_diagnostico, fecha_diagnostico)
-        VALUES (%s, %s, %s, %s)
+        UPDATE Diagnostico
+        SET id_medico = %s, comentarios_diagnostico = %s, fecha_diagnostico = %s
+        WHERE id_paciente = %s
+        AND fecha_diagnostico = (SELECT MAX(fecha_diagnostico) FROM Diagnostico WHERE id_paciente = %s)
         """
-        cursor.execute(query, (id_paciente, nuevo_medico, 'Nuevo diagnóstico asignado', date.today()))
+        cursor.execute(query, (nuevo_medico, 'Médico actualizado', date.today(), id_paciente, id_paciente))
         conn.commit()
         print("Médico cambiado exitosamente.")
     else:
