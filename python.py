@@ -7,13 +7,20 @@ from psycopg2 import Error
    #     password=PASSWORD,
     #    host=HOST,
      #   async_=1)
-        
-        # Configurar la conexión a la base de datos
+
+## Esto en otro archivo
+HOST = 'localhost'
+DATABASE = 'nombredb'
+USER = 'postgres'
+PASSWORD = 'pass'
+
+
+# Configurar la conexión a la base de datos
 def connect_db():
     return psycopg2.connect(
-        dbname='Pacientes2',
-        user='postgres',
-        password='lacontraseña',
+        dbname='HOST',
+        user='DATABASE',
+        password='PASSWORD',
         host='localhost',
         #port='3306'
     )
