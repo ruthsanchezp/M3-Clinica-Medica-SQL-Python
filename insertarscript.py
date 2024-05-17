@@ -10,6 +10,7 @@ cur = conn.cursor()
 def insertar_habitacion():
     for _ in range(10):
         numero_habitacion = int(input("Ingresar número de habitación: "))
+        ## %s es una caracteristica psycopg2 para evitar que se hagan inyecciones sql o que los datos se ingresen mal
         cur.execute("INSERT INTO Habitacion (numero_habitacion) VALUES (%s)", (numero_habitacion,))
     conn.commit()
 
@@ -17,6 +18,7 @@ def insertar_cama():
     for _ in range(10):
         numero_cama = int(input("Ingresar el número de la cama: "))
         id_habitacion = int(input("Ingresar el ID de la habitación: "))
+        
         cur.execute("INSERT INTO Cama (numero_cama, id_habitacion) VALUES (%s, %s)", (numero_cama, id_habitacion))
     conn.commit()
 
