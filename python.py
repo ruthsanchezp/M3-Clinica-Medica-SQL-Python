@@ -12,7 +12,6 @@ def connect_db():
         host=config.HOST,
     )
 
-
 # Mostrar todos los pacientes
 def mostrar_pacientes(conn):
     cursor = conn.cursor()
@@ -117,12 +116,23 @@ def crear_habitacion(conn, numero_habitacion):
     cursor.close()
 
 # Crear una nueva cama
-def crear_cama(conn, numero_cama, id_habitacion):
+def crear_cama(conn, numero_cama, numero_habitacion):
     cursor = conn.cursor()
-    query = "INSERT INTO Cama (numero_cama, id_habitacion) VALUES (%s, %s)"
-    cursor.execute(query, (numero_cama, id_habitacion))
-    conn.commit()
-    print("Cama creada exitosamente.")
+    
+    # Obtener id_habitacion a partir del numero_habitacion
+    query = "SELECT id_habitacion FROM Habitacion WHERE numero_habitacion = %s"
+    cursor.execute(query, (numero_habitacion,))
+    result = cursor.fetchone()
+    
+    if result:
+        id_habitacion = result[0]
+        query = "INSERT INTO Cama (numero_cama, id_habitacion) VALUES (%s, %s)"
+        cursor.execute(query, (numero_cama, id_habitacion))
+        conn.commit()
+        print("Cama creada exitosamente.")
+    else:
+        print(f"No se encontró una habitación con el número {numero_habitacion}.")
+    
     cursor.close()
 
 # Menú de la consola
@@ -160,8 +170,8 @@ def menu():
                 crear_habitacion(conn, numero_habitacion)
             case '6':
                 numero_cama = input("Ingrese el número de la nueva cama: ")
-                id_habitacion = input("Ingrese el ID de la habitación: ")
-                crear_cama(conn, numero_cama, id_habitacion)
+                numero_habitacion = input("Ingrese el número de la habitación: ")
+                crear_cama(conn, numero_cama, numero_habitacion)
             case '7':
                 conn.close()
                 break
