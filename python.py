@@ -11,6 +11,7 @@ def connect_db():
         password=config.PASSWORD,
         host=config.HOST,
     )
+
 # Mostrar todos los pacientes
 def mostrar_pacientes(conn):
     cursor = conn.cursor()
@@ -52,26 +53,56 @@ def mostrar_detalle_paciente(conn, rut):
         print("Paciente no encontrado.")
     cursor.close()
 
+# Obtener id_cama a partir de numero_cama y numero_habitacion
+def obtener_id_cama(conn, numero_cama, numero_habitacion):
+    cursor = conn.cursor()
+    query = """
+    SELECT Cama.id_cama
+    FROM Cama
+    JOIN Habitacion ON Cama.id_habitacion = Habitacion.id_habitacion
+    WHERE Cama.numero_cama = %s AND Habitacion.numero_habitacion = %s
+    """
+    cursor.execute(query, (numero_cama, numero_habitacion))
+    result = cursor.fetchone()
+    cursor.close()
+    return result[0] if result else None
+
 # Cambiar a un paciente de cama
-def cambiar_cama(conn, rut, nueva_cama):
+def cambiar_cama(conn, rut, numero_cama, numero_habitacion):
+    id_cama = obtener_id_cama(conn, numero_cama, numero_habitacion)
+    if not id_cama:
+        print(f"No se encontró una cama con el número {numero_cama} en la habitación {numero_habitacion}.")
+        return
+
     cursor = conn.cursor()
     query = "UPDATE Paciente SET id_cama = %s WHERE rut = %s"
-    cursor.execute(query, (nueva_cama, rut))
+    cursor.execute(query, (id_cama, rut))
     conn.commit()
     print("Cama cambiada exitosamente.")
     cursor.close()
 
-# Cambiar a un paciente de médico
+# Cambiar a un paciente de médico y crear un nuevo diagnóstico
 def cambiar_medico(conn, rut, nuevo_medico):
     cursor = conn.cursor()
-    query = """
-    UPDATE Diagnostico 
-    SET id_medico = %s 
-    WHERE id_paciente = (SELECT id_paciente FROM Paciente WHERE rut = %s)
-    """
-    cursor.execute(query, (nuevo_medico, rut))
-    conn.commit()
-    print("Médico cambiado exitosamente.")
+    
+    # Obtener id_paciente
+    cursor.execute("SELECT id_paciente FROM Paciente WHERE rut = %s", (rut,))
+    result = cursor.fetchone()
+    
+    if result:
+        id_paciente = result[0]
+        
+        # Crear un nuevo diagnóstico
+        query = """
+        INSERT INTO Diagnostico (id_paciente, id_medico, comentarios_diagnostico, fecha_diagnostico)
+        VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(query, (id_paciente, nuevo_medico, 'Nuevo diagnóstico asignado', date.today()))
+        conn.commit()
+        print("Médico cambiado exitosamente.")
+    else:
+        print("Paciente no encontrado.")
+    
     cursor.close()
 
 # Crear una nueva habitación
@@ -80,7 +111,7 @@ def crear_habitacion(conn, numero_habitacion):
     query = "INSERT INTO Habitacion (numero_habitacion) VALUES (%s)"
     cursor.execute(query, (numero_habitacion,))
     conn.commit()
-    print("La habitación ha sido creada.")
+    print("Habitación creada exitosamente.")
     cursor.close()
 
 # Crear una nueva cama
@@ -92,12 +123,12 @@ def crear_cama(conn, numero_cama, id_habitacion):
     print("Cama creada exitosamente.")
     cursor.close()
 
-# Menú
+# Menú de la consola
 def menu():
     conn = connect_db()
     while True:
         print("\n--- Menú ---")
-        print("1. Mostrar a todos los pacientes")
+        print("1. Mostrar todos los pacientes")
         print("2. Mostrar detalle de un paciente por RUT")
         print("3. Cambiar a un paciente de cama")
         print("4. Cambiar a un paciente de médico")
@@ -115,8 +146,9 @@ def menu():
                 mostrar_detalle_paciente(conn, rut)
             case '3':
                 rut = input("Ingrese el RUT del paciente: ")
-                nueva_cama = input("Ingrese el ID de la nueva cama: ")
-                cambiar_cama(conn, rut, nueva_cama)
+                numero_cama = input("Ingrese el número de la nueva cama: ")
+                numero_habitacion = input("Ingrese el número de la habitación: ")
+                cambiar_cama(conn, rut, numero_cama, numero_habitacion)
             case '4':
                 rut = input("Ingrese el RUT del paciente: ")
                 nuevo_medico = input("Ingrese el ID del nuevo médico: ")
@@ -132,7 +164,7 @@ def menu():
                 conn.close()
                 break
             case _:
-                print("Opció invalida.")
+                print("Opción no válida, intente de nuevo.")
 
 if __name__ == "__main__":
     menu()
