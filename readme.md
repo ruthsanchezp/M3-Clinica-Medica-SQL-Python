@@ -1,4 +1,4 @@
-# Aplicación de Consola para Clínica Médica para recuperación de Información
+# Aplicación de Consola para Clínica Médica 
 
 Este repositorio contiene una aplicación de consola desarrollada en Python que permite gestionar la información de pacientes, médicos, habitaciones, camas y exámenes médicos en una clínica médica. Utiliza PostgreSQL como motor de base de datos para almacenar y recuperar la información necesaria.
 
