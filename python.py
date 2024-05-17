@@ -1,13 +1,22 @@
 import psycopg2
 from psycopg2 import Error
 
-# Configura los parámetros de conexión
-conexion_parametros = {
-    "host": "host",
-    "database": "database",
-    "user": "user",
-    "password": "pass"
-}
+#conn = psycopg2.connect(
+ #       dbname=DATABASE,
+  #      user=USER,
+   #     password=PASSWORD,
+    #    host=HOST,
+     #   async_=1)
+        
+        # Configurar la conexión a la base de datos
+def connect_db():
+    return psycopg2.connect(
+        dbname='Pacientes2',
+        user='postgres',
+        password='lacontraseña',
+        host='localhost',
+        #port='3306'
+    )
 # Mostrar todos los pacientes
 def mostrar_pacientes(conn):
     cursor = conn.cursor()
