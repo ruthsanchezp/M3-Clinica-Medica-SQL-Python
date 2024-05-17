@@ -1,28 +1,14 @@
 import psycopg2
 from psycopg2 import Error
+import config
 
-#conn = psycopg2.connect(
- #       dbname=DATABASE,
-  #      user=USER,
-   #     password=PASSWORD,
-    #    host=HOST,
-     #   async_=1)
-
-## Esto en otro archivo
-HOST = 'localhost'
-DATABASE = 'nombredb'
-USER = 'postgres'
-PASSWORD = 'pass'
-
-
-# Configurar la conexión a la base de datos
+# Configurar la conexión a la base de datos con los datos del archivo config.py
 def connect_db():
     return psycopg2.connect(
-        dbname='HOST',
-        user='DATABASE',
-        password='PASSWORD',
-        host='localhost',
-        #port='3306'
+        dbname=config.DATABASE,
+        user=config.USER,
+        password=config.PASSWORD,
+        host=config.HOST,
     )
 # Mostrar todos los pacientes
 def mostrar_pacientes(conn):
