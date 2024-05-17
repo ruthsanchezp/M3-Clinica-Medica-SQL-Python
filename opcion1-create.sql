@@ -1,21 +1,19 @@
 CREATE TABLE Habitacion (
-    id_habitacion INT PRIMARY KEY,
+    id_habitacion SERIAL PRIMARY KEY,
     numero_habitacion INT
 );
 
 CREATE TABLE Cama (
-    id_cama INT PRIMARY KEY,
+    id_cama SERIAL PRIMARY KEY,
     numero_cama INT,
     id_habitacion INT,
     FOREIGN KEY (id_habitacion) REFERENCES Habitacion(id_habitacion)
 );
 
-// El rut debería ser el ID...??
-
 CREATE TABLE Paciente (
-    id_paciente INT PRIMARY KEY,
+    id_paciente SERIAL PRIMARY KEY,
     nombre_paciente VARCHAR(255),
-    rut VACHAR (255) UNIQUE,
+    rut VARCHAR(255) UNIQUE,
     fecha_ingreso DATE,
     fecha_alta DATE,
     id_cama INT,
@@ -23,18 +21,18 @@ CREATE TABLE Paciente (
 );
 
 CREATE TABLE Medico (
-    id_medico INT PRIMARY KEY,
+    id_medico SERIAL PRIMARY KEY,
     nombre_medico VARCHAR(255)
 );
 
 CREATE TABLE Examen (
-    id_examen INT PRIMARY KEY,
+    id_examen SERIAL PRIMARY KEY,
     nombre_examen VARCHAR(255),
     tipo_examen VARCHAR(255)
 );
 
 CREATE TABLE Diagnostico (
-    id_diagnostico INT PRIMARY KEY,
+    id_diagnostico SERIAL PRIMARY KEY,
     id_paciente INT,
     id_medico INT,
     comentarios_diagnostico TEXT,
@@ -44,14 +42,14 @@ CREATE TABLE Diagnostico (
 );
 
 CREATE TABLE Enfermedad (
-    id_enfermedad INT PRIMARY KEY,
+    id_enfermedad SERIAL PRIMARY KEY,
     id_diagnostico INT,
     nombre_enfermedad VARCHAR(255),
     FOREIGN KEY (id_diagnostico) REFERENCES Diagnostico(id_diagnostico)
 );
 
 CREATE TABLE Orden (
-    id_orden INT PRIMARY KEY,
+    id_orden SERIAL PRIMARY KEY,
     id_paciente INT,
     id_medico INT,
     id_examen INT,
