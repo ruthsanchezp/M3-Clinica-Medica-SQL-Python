@@ -1,12 +1,15 @@
 import psycopg2
+import config
 
-################ Hay que importar la conexión a posgress
+# Configurar la conexión a la base de datos con los datos del archivo config.py
+def connect_db():
+    return psycopg2.connect(
+        dbname='HOST',
+        user='DATABASE',
+        password='PASSWORD',
+        host='localhost',
+    )
 
-## Esto en otro archivo
-HOST = 'localhost'
-DATABASE = 'nombredb'
-USER = 'postgres'
-PASSWORD = 'pass'
 
 # Cursor para ejecutar comandos SQL
 cur = conn.cursor()
