@@ -13,10 +13,10 @@ import config
         
 def connect_db():
     return psycopg2.connect(
-        dbname='Pacientes2',
-        user='postgres',
-        password='doite2323',
-        host='localhost',
+         dbname=DATABASE,
+  #      user=USER,
+   #     password=PASSWORD,
+    #    host=HOST,
         #port='3306'
     )
 
