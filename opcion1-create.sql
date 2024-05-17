@@ -1,12 +1,12 @@
 CREATE TABLE Habitacion (
     id_habitacion SERIAL PRIMARY KEY,
-    numero_habitacion INT
+    numero_habitacion INT UNIQUE
 );
 
 CREATE TABLE Cama (
     id_cama SERIAL PRIMARY KEY,
     numero_cama INT,
-    id_habitacion INT,
+    id_habitacion INT, 
     FOREIGN KEY (id_habitacion) REFERENCES Habitacion(id_habitacion)
 );
 
