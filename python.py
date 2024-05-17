@@ -77,7 +77,7 @@ def crear_habitacion(conn, numero_habitacion):
     query = "INSERT INTO Habitacion (numero_habitacion) VALUES (%s)"
     cursor.execute(query, (numero_habitacion,))
     conn.commit()
-    print("Habitación creada exitosamente.")
+    print("La habitación ha sido creada.")
     cursor.close()
 
 # Crear una nueva cama
@@ -89,12 +89,12 @@ def crear_cama(conn, numero_cama, id_habitacion):
     print("Cama creada exitosamente.")
     cursor.close()
 
-# Menú de la consola
+# Menú
 def menu():
     conn = connect_db()
     while True:
         print("\n--- Menú ---")
-        print("1. Mostrar todos los pacientes")
+        print("1. Mostrar a todos los pacientes")
         print("2. Mostrar detalle de un paciente por RUT")
         print("3. Cambiar a un paciente de cama")
         print("4. Cambiar a un paciente de médico")
@@ -102,7 +102,7 @@ def menu():
         print("6. Crear una nueva cama")
         print("7. Salir")
         
-        opcion = input("Seleccione una opción: ")
+        opcion = input("Seleccione opción: ")
 
         match opcion:
             case '1':
@@ -129,7 +129,7 @@ def menu():
                 conn.close()
                 break
             case _:
-                print("Opción no válida, intente de nuevo.")
+                print("Opció invalida.")
 
 if __name__ == "__main__":
     menu()
