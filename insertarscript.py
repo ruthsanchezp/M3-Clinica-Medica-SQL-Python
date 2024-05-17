@@ -1,7 +1,12 @@
 import psycopg2
 
-################ Hay que importar la conexión a posgress.!!
+################ Hay que importar la conexión a posgress
 
+## Esto en otro archivo
+HOST = 'localhost'
+DATABASE = 'nombredb'
+USER = 'postgres'
+PASSWORD = 'pass'
 
 # Cursor para ejecutar comandos SQL
 cur = conn.cursor()
