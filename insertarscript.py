@@ -1,17 +1,13 @@
 import psycopg2
-
-HOST = 'localhost'
-DATABASE = 'Pacientes2'
-USER = 'postgres'
-PASSWORD = 'doite2323'
+import config
 
 # Configurar la conexión a la base de datos
 def connect_db():
     return psycopg2.connect(
-        dbname=DATABASE,
-        user=USER,
-        password=PASSWORD,
-        host=HOST,
+        dbname=config.DATABASE,
+        user=config.USER,
+        password=config.PASSWORD,
+        host=config.HOST,
     )
 
 # Conexión y cursor para ejecutar comandos SQL
