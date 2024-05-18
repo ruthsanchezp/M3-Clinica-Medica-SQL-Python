@@ -2,22 +2,13 @@ import psycopg2
 from psycopg2 import Error
 from datetime import date
 import config
-
-# Configurar la conexión a la base de datos con los datos del archivo config.py
-#conn = psycopg2.connect(
- #       dbname=DATABASE,
-  #      user=USER,
-   #     password=PASSWORD,
-    #    host=HOST,
-     #   async_=1)
         
 def connect_db():
     return psycopg2.connect(
-         dbname=DATABASE,
-  #      user=USER,
-   #     password=PASSWORD,
-    #    host=HOST,
-        #port='3306'
+         dbname=config.DATABASE,
+         user=config.USER,
+         password=config.PASSWORD,
+         host=config.HOST,
     )
 
         # Mostrar todos los pacientes
