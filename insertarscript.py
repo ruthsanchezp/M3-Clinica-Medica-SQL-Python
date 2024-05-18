@@ -31,7 +31,7 @@ def insertar_cama():
     while True:
         try:
             numero_cama = int(input("Ingresar el número de la cama: "))
-            numero_habitacion = int(input("Ingresar el número de la habitación: "))
+            numero_habitacion = int(input("Ingresar el número de la habitación que se le asignará a la cama: "))
             
             cur.execute("SELECT id_habitacion FROM Habitacion WHERE numero_habitacion = %s", (numero_habitacion,))
             id_habitacion = cur.fetchone()
@@ -56,10 +56,19 @@ def insertar_paciente():
             rut = input("Ingresar el RUT del paciente: ")
             fecha_ingreso = input("Ingresar la fecha de ingreso (YYYY-MM-DD): ")
             fecha_alta = input("Ingresar la fecha de alta (YYYY-MM-DD): ")
-            id_cama = int(input("Ingresar el ID de la cama: "))
-            cur.execute("INSERT INTO Paciente (nombre_paciente, rut, fecha_ingreso, fecha_alta, id_cama) VALUES (%s, %s, %s, %s, %s)", 
-                        (nombre_paciente, rut, fecha_ingreso, fecha_alta, id_cama))
-            conn.commit()
+            
+            # Asignar automáticamente la primera cama disponible
+            cur.execute("SELECT id_cama FROM Cama WHERE id_cama NOT IN (SELECT id_cama FROM Paciente) LIMIT 1")
+            id_cama = cur.fetchone()
+            
+            if id_cama:
+                id_cama = id_cama[0]
+                cur.execute("INSERT INTO Paciente (nombre_paciente, rut, fecha_ingreso, fecha_alta, id_cama) VALUES (%s, %s, %s, %s, %s)", 
+                            (nombre_paciente, rut, fecha_ingreso, fecha_alta, id_cama))
+                conn.commit()
+                print(f"Paciente insertado con éxito en la cama ID: {id_cama}")
+            else:
+                print("No hay camas disponibles")
         except Exception as e:
             print(f"Error al insertar paciente: {e}")
             conn.rollback()
@@ -150,3 +159,4 @@ insertar_orden()
 # Cerrar la conexión
 cur.close()
 conn.close()
+
